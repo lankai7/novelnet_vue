@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" 
+     viewBox="0 0 32 32"
+     width="32" 
+     height="32"
+     class="book-icon">
+  
+  <!-- 背景书本渐变 -->
+  <defs>
+    <linearGradient id="bookGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4a90e2"/>
+      <stop offset="100%" stop-color="#6c5ce7"/>
+    </linearGradient>
+    
+    <linearGradient id="pageGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8f9fa"/>
+      <stop offset="100%" stop-color="#e9ecef"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 书本主体 -->
+  <path fill="url(#bookGradient)" 
+        d="M7 4h20v24H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3z"/>
+  
+  <!-- 书页 -->
+  <path fill="url(#pageGradient)"
+        d="M10 6h14v20H10a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1z"/>
+  
+  <!-- 文字装饰 -->
+  <path fill="#2d3436" 
+        d="M13 12h8v1h-8zm0 3h6v1h-6zm0 3h8v1h-8z"/>
+  
+  <!-- 书签 -->
+  <path fill="#e74c3c"
+        d="M23 10h2v6l-3-2-3 2v-6h2z"/>
+</svg>

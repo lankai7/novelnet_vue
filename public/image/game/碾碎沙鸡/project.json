@@ -1,0 +1,24 @@
+{
+	"description" : "感觉工作坊里大都是视频和动图，游戏和应用少的可怜，故先随便找了个小游戏测试用，以后会发布更多有趣的内容\n\n你恨flappy bird吗?你每天晚上对着那个愚蠢的鸟做噩梦吗？ 压扁它们！",
+	"file" : "index.html",
+	"general" : 
+	{
+		"properties" : 
+		{
+			"schemecolor" : 
+			{
+				"order" : 0,
+				"text" : "ui_browse_properties_scheme_color",
+				"type" : "color",
+				"value" : "0 0 0"
+			}
+		}
+	},
+	"monetization" : false,
+	"preview" : "preview.jpg",
+	"tags" : [ "Game" ],
+	"title" : "小游戏-压扁小鸟",
+	"type" : "web",
+	"visibility" : "public",
+	"workshopid" : 830112907
+}

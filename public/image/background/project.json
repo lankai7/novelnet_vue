@@ -1,0 +1,23 @@
+{
+	"description" : "落叶，随机产生落叶，随机掉落，在你的\\Steam\\steamapps\\workshop\\content\\431960文件夹下，找到源文件的话，你可以根据说明或是自己查看源码替换图片，可以换成你想要的PNG图片，比如叶子上写你喜欢的人或是换成她（他）的头像。会非常有趣。喜欢就点个赞吧。\n【在线预览】\nhttp://www.dqfps.com/wallpaper/html5/%E8%90%BD%E5%8F%B6/%E8%90%BD%E5%8F%B6.html",
+	"file" : "index.html",
+	"general" : 
+	{
+		"properties" : 
+		{
+			"schemecolor" : 
+			{
+				"order" : 0,
+				"text" : "ui_browse_properties_scheme_color",
+				"type" : "color",
+				"value" : "0 0 0"
+			}
+		}
+	},
+	"preview" : "preview.jpg",
+	"tags" : [ "Nature" ],
+	"title" : "落叶",
+	"type" : "web",
+	"visibility" : "public",
+	"workshopid" : 850491296
+}
