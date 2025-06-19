@@ -12,11 +12,11 @@ NovelNet 是一个前后端分离的小说阅读平台，采用SpringBoot后端+
 
 本项目由两个独立仓库组成：
 
-1. **后端服务**：[novelnet-backend](https://github.com/lankai7/novelnet)
+1. **后端服务**：[novelnet](https://github.com/lankai7/novelnet)
    - 基于SpringBoot的RESTful API服务
    - 提供数据接口和业务逻辑处理
 
-2. **前端应用**：[novelnet-frontend](https://github.com/lankai7/novelnet_vue)
+2. **前端应用**：[novelnet_vue](https://github.com/lankai7/novelnet_vue)
    - 基于Vue.js的单页应用
    - 提供用户交互界面
 
