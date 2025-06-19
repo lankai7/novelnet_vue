@@ -10,7 +10,7 @@
                 </h1>
                 <ul class="type_ul">
                     <li v-for="(item, index) in obj.types" :key="index">
-                        <router-link :to="`/hello/typeBook?type=${item}`" :class="obj.top_nav_index == index ? 'link_class' : 'no_link_class'
+                        <router-link :to="`/hello/typeBook?type=${item}&orderBy=recommend_num`" :class="obj.top_nav_index == index ? 'link_class' : 'no_link_class'
                             " @click="chageTopNavIndex(index)">
                             {{ item }}
                         </router-link>
@@ -22,8 +22,8 @@
                     <button class="search_button" @click="searchBook()">🔍️</button>
                 </div>
                 <div class="manage">
-                    <span v-if="obj.user.account == 'admin'" @click="goadminlogin()" class="manage"> 后台管理 </span>
-                    <span v-if="obj.user.account != 'admin'" class="game_play"> 🕹️放松一下
+                    <span v-if="obj.user.isAdmin == 1 " @click="goadminlogin()" class="manage"> 后台管理 </span>
+                    <span v-if="obj.user.isAdmin != 1 " class="game_play"> 🕹️放松一下
                         <ul class="game_list">
                             <li class="game" @click="playGame('0')">环球飞机</li>
                             <li class="game" @click="playGame('1')">限时魔方</li>
@@ -73,6 +73,7 @@
 import axios from "../hooks/request";
 import { onMounted, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { ElMessage } from 'element-plus';
 
 let route = useRoute();
 let router = useRouter();
@@ -139,7 +140,7 @@ let searchBook = () => {
             }
         });
     } else {
-        alert("搜索内容为空");
+        ElMessage.warning("搜索内容为空");
     }
 };
 
@@ -263,10 +264,10 @@ let playGame = (index) => {
     margin: 0 auto;
     padding: 15px 0;
     /* 内边距 */
-    display: flex;
     border-radius: 20px;
     align-items: center;
-    justify-content: space-between;
+    display: flex;
+    justify-content: space-between; /* 关键属性 */
     white-space: nowrap;
     /* 防止文本换行 */
     width: 90%;

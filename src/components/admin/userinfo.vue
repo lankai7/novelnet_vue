@@ -31,7 +31,7 @@
                 <li class="el-menu-sub el-submenu">
                   <div class="el-submenu__title" @click="gomanage()" style="padding-left: 20px;">
                     <i class="fa fa-upload"></i>
-                    <span>上新小说</span>
+                    <span>管理书库</span>
                     <i class="el-submenu__icon-arrow"></i>
                   </div>
                 </li>
@@ -40,7 +40,7 @@
                 <li class="el-menu-sub el-submenu" @click="gochapter()">
                   <div class="el-submenu__title" style="padding-left: 20px;">
                     <i class="fa fa-download"></i>
-                    <span>章节发布</span>
+                    <span>上传新书</span>
                     <i class="el-submenu__icon-arrow"></i>
                   </div>
 
@@ -85,12 +85,7 @@
     <div class="content-wrapper">
       <!--      页面内容-->
       <div class="container">
-        <div class="top_box">用户管理</div>
-        <!--        <div class="field">-->
-        <!--          <label for="input8">公告内容：</label>-->
-        <!--          <textarea type="text" id="input8" placeholder="小说简介"> </textarea>-->
-        <!--        </div>-->
-
+        <div class="top_box">用户管理</div> 
         <div>
           <el-table :data="userinfo" style="width: 100%">
             <el-table-column prop="uid" label="ID" width="80px"></el-table-column>
@@ -101,17 +96,20 @@
             <el-table-column prop="email" label="注册邮箱" width="180px"></el-table-column>
             <el-table-column label="VIP状态">
               <template #default="scope">
-                <el-switch v-model="scope.row.vip_status" :inactive-value="0" :active-value="1"
+                <el-switch v-model="scope.row.vipStatus" :inactive-value="0" :active-value="1"
                   @change="handleVipChange(scope.row)">
                 </el-switch>
               </template>
             </el-table-column>
             <el-table-column prop="enrollTime" label="创建时间" width="180px"></el-table-column>
-            <el-table-column label="操作" width="100">
+            <el-table-column label="Admin状态">
               <template #default="scope">
-                <el-button type="danger" size="small" @click="() => handleDelete(scope.row.user_id)">删除</el-button>
+                <el-switch v-model="scope.row.isAdmin" :inactive-value="0" :active-value="1"
+                  @change="handleAdminChange(scope.row)">
+                </el-switch>
               </template>
             </el-table-column>
+
           </el-table>
         </div>
         <!--      <div class="buttons">-->
@@ -140,7 +138,7 @@ let router = useRouter();
 // 评论
 let userinfo = ref([]);
 
-// 获取评论数据
+// 获取用户数据
 let userin = async () => {
   try {
     const res = await axios.get("user/token/getUserAll");
@@ -156,13 +154,12 @@ let userin = async () => {
 // 设置VIP状态
 const handleVipChange = async (row) => {
   try {
-    const newStatus = row.user_status == 1 ? 0 : 1;
+    const newStatus = row.vipStatus == 1 ? 1 : 0;
     const res = await axios.put("user/updateVIP", {
       uid: row.uid,
       isVip: newStatus
     });
     if (res.data.code == 200) {
-      row.user_status = newStatus;
       ElMessage.success('VIP状态更新成功！');
     } else {
       ElMessage.warning('VIP状态更新失败，请稍后再试！');
@@ -172,21 +169,23 @@ const handleVipChange = async (row) => {
   }
 };
 
-// 删除
-let handleDelete = async (id) => {
+// 设置admin状态
+const handleAdminChange = async (row) => {
   try {
-    const res = await axios.delete(`http://localhost:8080/user/${id}`);
-    if (res.data.code === 0) {
-      ElMessage.success('删除成功！');
+    const newStatus = row.isAdmin == 1 ? 1 : 0;
+    const res = await axios.put("user/updateAdminStatus", {
+      uid: row.uid,
+      isAdmin: newStatus
+    });
+    if (res.data.code == 200) {
+      ElMessage.success('admin状态更新成功！');
     } else {
-      ElMessage.warning('删除失败，请稍后再试！');
+      ElMessage.warning('admin状态更新失败，请稍后再试！');
     }
   } catch (error) {
-    ElMessage.error('删除失败，请检查网络连接！');
+    ElMessage.error('admin状态更新失败，请检查网络连接！');
   }
 };
-
-
 
 // 组件挂载时获取评论数据
 onMounted(userin);

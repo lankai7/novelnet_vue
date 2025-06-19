@@ -7,7 +7,7 @@
                 <button @click="router.go(-1)">返回上一页&gt;</button>
             </div>
             <div class="bookshelf_list">
-                <div v-for="(item, index) in obj.books" :key="index" @click="goReadBook(item.book.bid)">
+                <div v-for="(item, index) in obj.books" :key="index" class = list_bak @click="goReadBook(item.book.bid)">
                     <img :src="`/image/bookImg/${item.book.imgPath}`" />
                     <div class="bookshelf_list_content">
                         <span class="bookshelf_list_content_top">{{ item.book.name }}</span>
@@ -33,6 +33,7 @@ import axios from "../hooks/request";
 import { onMounted, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { cutString } from "../hooks/cutString";
+import { ElMessage } from 'element-plus';
 
 let route = useRoute();
 let router = useRouter();
@@ -71,9 +72,10 @@ let delBookshelf = (bid) => {
             }
         }).then(res => {
             if (res.data.code == 200) {
+                ElMessage.success("移除成功！");
                 getBooks();
             } else {
-                alert("移除失败");
+                ElMessage.error("移除失败");
             }
         })
     }
@@ -149,6 +151,7 @@ onMounted(() => {
 }
 
 .bookshelf_title {
+    color:#af2c2c;
     display: flex;
     justify-content: space-between;
     /* 在子元素之间和两端分配空间 */
@@ -231,6 +234,27 @@ onMounted(() => {
     cursor: pointer;
 }
 .bookshelf_list_content_del button:hover {
-    background-color: #e66b94;
+    background-color: #B22222;
+}
+
+.list_bak{
+    flex: 1;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 15px 15px 15px 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.list_bak:hover{
+    background: linear-gradient(45deg,
+            rgba(207, 172, 244, 0.4) 0%,
+            /* 添加透明度：0.8 */
+            rgba(208, 189, 247, 0.4) 20%,
+            rgba(172, 218, 244, 0.4) 40%,
+            rgba(209, 201, 233, 0.4) 60%,
+            rgba(237, 172, 197, 0.4) 80%,
+            rgba(255, 153, 153, 0.4) 100%);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 </style>

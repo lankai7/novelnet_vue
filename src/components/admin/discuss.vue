@@ -31,7 +31,7 @@
                 <li class="el-menu-sub el-submenu">
                   <div class="el-submenu__title" @click="gomanage()" style="padding-left: 20px;">
                     <i class="fa fa-upload"></i>
-                    <span>上新小说</span>
+                    <span>管理书库</span>
                     <i class="el-submenu__icon-arrow"></i>
                   </div>
                 </li>
@@ -40,7 +40,7 @@
                 <li class="el-menu-sub el-submenu" @click="gochapter()">
                   <div class="el-submenu__title" style="padding-left: 20px;">
                     <i class="fa fa-download"></i>
-                    <span>章节发布</span>
+                    <span>上传新书</span>
                     <i class="el-submenu__icon-arrow"></i>
                   </div>
 
@@ -90,9 +90,10 @@
         <!-- 输入框用于获取书籍编号 -->
         <div class="field novel">
           <label for="bookId">书籍编号:</label>
-          <input v-model="data.bookId" id="bookId" placeholder="请输入书籍编号" />
+          <input v-model="data.bookId" id="bookId" placeholder="请输入书籍编号"
+            style="width: 20%; height: 37px; font-size: 14px;border: 1px solid #ccc;border-radius: 5px 0 0 5px;" />
           <!-- 添加按钮 -->
-          <el-button type="primary" size="small" @click="handleSearch">搜索</el-button>
+          <el-button type="primary" class = "btn" @click="handleSearch">搜索</el-button>
         </div>
 
         <div>
@@ -126,7 +127,7 @@ let router = useRouter();
 // 评论
 let data = reactive({
   comments: [],
-  bookId: '0',
+  bookId: '',
 })
 
 let handleSearch = () => {
@@ -135,11 +136,9 @@ let handleSearch = () => {
 
 // 获取评论列表
 const fetchComments = async () => {
-  if (data.bookId == '') {
-    data.comments = [];
-    return
-  }
-  const response = await axios.get(`comment/${data.bookId}`);
+  let bid = data.bookId;
+  if(bid == '') bid = 0;
+  const response = await axios.get(`comment/${bid}`);
 
   if (response.data.code === 200) {
     data.comments = response.data.data || []; // 确保 data.comments 至少是空数组
@@ -150,33 +149,15 @@ const fetchComments = async () => {
 
 // 删除
 let handleDelete = async (id) => {
-    const res = await axios.delete(`comment/delete/${id.commentId}`);
-    if (res.data.code == 200) {
-      ElMessage.success('更改成功！');
-      fetchComments();
-    } else {
-      ElMessage.warning('更改失败，请稍后再试！' + num);
-    }
+  const res = await axios.delete(`comment/delete/${id.commentId}`);
+  if (res.data.code == 200) {
+    ElMessage.success('更改成功！');
+    fetchComments();
+  } else {
+    ElMessage.warning('更改失败，请稍后再试！' + num);
+  }
 };
 
-//
-// const handleDelete = async (id, source) => {
-//   console.log('Deleting ID:', id, 'from source:', source); // 调试日志
-//   try {
-//     let url = source === 'comments1' ? `http://localhost:8080/novel/comment/${id}` : `http://localhost:8080/novel/reply/${id}`;
-//     console.log('Delete URL:', url); // 调试日志
-//     const res = await axios.delete(url);
-//     if (res.data.code === 0) {
-//       comments.value = comments.value.filter(comment => comment.id !== id);
-//       console.log('Updated Comments after delete:', comments.value); // 调试日志
-//       ElMessage.success('删除成功！');
-//     } else {
-//       ElMessage.warning('删除失败，请稍后再试！');
-//     }
-//   } catch (error) {
-//     ElMessage.error('删除失败，请检查网络连接！');
-//   }
-// };
 
 
 
@@ -348,6 +329,7 @@ let user = () => {
   display: flex;
   width: 100%;
   padding-top: 25px;
+  flex-direction: column;
 }
 
 .box {
@@ -358,11 +340,11 @@ let user = () => {
 .field {
   display: flex;
   align-items: center;
-  margin-bottom: 60px;
 }
 
 .field label {
-  flex: 0 0 100px;
+  font-size: 17px;
+  flex: 0 0 80px;
   margin-right: 10px;
   text-align: right;
 }
@@ -417,7 +399,10 @@ let user = () => {
 .el-table {
   margin: 20px 0;
 }
-
+.btn{
+  height:38px;
+  border-radius: 0 5px 5px 0;
+}
 
 /* 响应式调整 */
 @media (max-width: 767px) {

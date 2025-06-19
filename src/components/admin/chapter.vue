@@ -4,7 +4,7 @@
     <header class="main-header animated">
 
       <nav class="navbar">
-        <a href="#" class="sidebar-toggle" >
+        <a href="#" class="sidebar-toggle">
           <span class="sr-only">小说后台管理系统</span>
         </a>
         <div class="navbar-custom-menu">
@@ -21,27 +21,27 @@
     </header>
 
     <!-- 侧边栏 -->
-    <aside class="main-sidebar animated showSlide expandSide" >
+    <aside class="main-sidebar animated showSlide expandSide">
       <div class="el-scrollbar">
         <div class="vue-scrollbar el-scrollbar__wrap">
           <div class="el-scrollbar__view">
             <div class="sidebar">
               <ul class="el-menu el-menu-style">
 
-                <li class="el-menu-sub el-submenu" >
+                <li class="el-menu-sub el-submenu">
                   <div class="el-submenu__title" @click="gomanage()" style="padding-left: 20px;">
                     <i class="fa fa-upload"></i>
-                    <span>上新小说</span>
-                    <i class="el-submenu__icon-arrow" ></i>
+                    <span>管理书库</span>
+                    <i class="el-submenu__icon-arrow"></i>
                   </div>
                 </li>
 
 
-                <li class="el-menu-sub el-submenu" @click="gochapter()" >
-                  <div class="el-submenu__title"  style="padding-left: 20px;">
+                <li class="el-menu-sub el-submenu" @click="gochapter()">
+                  <div class="el-submenu__title" style="padding-left: 20px;">
                     <i class="fa fa-download"></i>
-                    <span>章节发布</span>
-                    <i class="el-submenu__icon-arrow" ></i>
+                    <span>上传新书</span>
+                    <i class="el-submenu__icon-arrow"></i>
                   </div>
 
                 </li>
@@ -49,81 +49,56 @@
                   <div class="el-submenu__title" @click="" style="padding-left: 20px;">
                     <i class="fa fa-cog"></i>
                     <span>删除小说</span>
-                    <i class="el-submenu__icon-arrow" ></i>
+                    <i class="el-submenu__icon-arrow"></i>
                   </div>
 
                 </li>
 
-                <li class="el-menu-sub el-submenu" >
+                <li class="el-menu-sub el-submenu">
                   <div class="el-submenu__title" @click="banner()" style="padding-left: 20px;">
                     <i class="fa fa-download"></i>
                     <span>发布公告</span>
                   </div>
                 </li>
 
-                <li class="el-menu-sub el-submenu" >
+                <li class="el-menu-sub el-submenu">
                   <div class="el-submenu__title" @click="discuss()" style="padding-left: 20px;">
                     <i class="fa fa-download"></i>
                     <span>评论审核</span>
                   </div>
                 </li>
 
-                                <li class="el-menu-sub el-submenu" >
-                                  <div class="el-submenu__title" @click="user" style="padding-left: 20px;">
-                                    <i class="fa fa-download"></i>
-                                    <span>用户管理</span>
-                                  </div>
-                                </li>
+                <li class="el-menu-sub el-submenu">
+                  <div class="el-submenu__title" @click="user" style="padding-left: 20px;">
+                    <i class="fa fa-download"></i>
+                    <span>用户管理</span>
+                  </div>
+                </li>
               </ul>
             </div>
           </div>
         </div>
       </div>
     </aside>
-
     <!-- 内容区域 -->
     <div class="content-wrapper">
       <div class="container">
-        <div class="top_box">发布章节</div>
+        <div class="top_box">上传新书</div>
         <div class="boxes">
           <div class="box">
-            <div class="field"  id="box1">
-              <label for="input1">*小说编号</label>
-              <input type="text" id="input1" placeholder="小说编号" v-model="chapter.id">
+            <div class="id_box">  
+            <label for="bookId">书籍编码：</label>
+            <input v-model="obj.bookId" class="input" id="bookId" placeholder="请输入书籍编号" />
             </div>
-
-            <div class="novel">
-              <button  @click = "getBook(chapter.id)"> 查询小说名 </button>
-              <span> 小说名： {{ chapter.book}}</span>
+            <div class="type_box"> 
+            <label for="bookType">书籍类别：</label>
+            <select id="input" v-model="obj.bookType" class="input">
+              <option v-for="(item, index) in obj.types" :key="index" :value="item">{{ item }}</option>
+            </select>
             </div>
-
-            <div class="field" >
-              <label for="input2">*章节数</label>
-              <input type="text" id="input2" placeholder="章节数" v-model="chapter.chapter_num">
-            </div>
-            <div class="field">
-              <label for="input3">*会员阅读</label>
-              <select id="input3" v-model="chapter.is_vip">
-                <option value="1">是</option>
-                <option value="0">否</option>
-              </select>
-            </div>
+            <button class="btn_start" @click="scrapeBook">爬取书籍</button>
+            <p v-if="message">{{ message }}</p>
           </div>
-          <div class="box">
-            <div class="field">
-              <label for="input4">*章节标题</label>
-              <input type="text" id="input4" placeholder="请输入章节标题" v-model="chapter.chapter_name">
-            </div>
-            <div class="field">
-              <label for="input5">章节内容</label>
-              <textarea id="input5" v-model="chapter.content"></textarea>
-<!--              <quill-editor id="input5"  v-model="chapter.content"></quill-editor>-->
-            </div>
-          </div>
-        </div>
-        <div class="buttons">
-          <button class="submit-btn" @click="handleSubmitc">提交</button>
-          <button class="cancel-btn" @click="handleCancelc">取消</button>
         </div>
       </div>
     </div>
@@ -131,65 +106,39 @@
 </template>
 
 <script setup>
-import { onMounted, reactive } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import QuillEditor from './editor.vue';
 import { ElMessage } from 'element-plus';
-import { ref } from 'vue';
-import axios from "../../hooks/request.js" ;
+import { useRoute, useRouter } from "vue-router";
+import { onMounted, reactive } from "vue";
+import axios from '../../hooks/request.js';
+
 let route = useRoute();
 let router = useRouter();
-// 章节
 
-const chapter = ref({
-  id: '',
-  chapter_num: '',
-  chapter_name: '',
-  is_vip: '',
-  content: '',
-  book:'',
+let obj = reactive({
+  bookId: '',
+  bookType: '',
+  message: '',
+  types: ''
 });
 
-// 获取小说名
-
-let getBook = (id) => {
-  console.log('bid:' + route.params.bid)
-  axios.get(`http://localhost:5173/novel/${id}`).then(res => {
-    if (res.data.code === 0) {
-       chapter.value.book = res.data.data.novel_title;
-      console.log('chapter.book:',chapter.value.book)
-    }else {
-      console.log(res.data.data)
-    }
+let scrapeBook = async () => {
+  try {
+    ElMessage.success("开始爬取")
+    const response = await axios.post('/books/scrape', null, {
+      params: { bookId: obj.bookId, bookType: obj.bookType }
+    });
+    obj.message = response.data.message;
+  } catch (error) {
+    obj.message = "爬取失败: " + (error.response?.data?.error || error.message);
+    ElMessage.error("爬取失败")
+  }
+}
+let getBook = async () => {
+  await axios.get("/book/getType").then((res) => {
+    obj.types = res.data.data;
   })
 }
-
-let handleSubmitc = async () => {
-  try {
-    const res = await axios.post(`http://localhost:8080/novel/${chapter.value.id}/chapter`, {
-      chapter_num: chapter.value.chapter_num,
-      chapter_name: chapter.value.chapter_name,
-      is_vip: chapter.value.is_vip,
-      content: chapter.value.content,
-    });
-    if (res.data.code === 0) {
-      ElMessage.success('发布成功！');
-    } else {
-      ElMessage.warning('发布失败，请稍后再试！' );
-    }
-  } catch (error) {
-    ElMessage.error('发布失败，请检查网络连接！');
-  }
-};
-
-// 取消操作
-const handleCancelc = () => {
-  // 清空表单
-  for (const key in chapter.value) {
-    chapter.value[key] = '';
-  }
-};
-
+onMounted(getBook)
 
 
 let gochapter = () => {
@@ -283,6 +232,7 @@ let user = () => {
   padding: 0;
   list-style: none;
 }
+
 .el-submenu__title {
   display: flex;
   align-items: center;
@@ -293,6 +243,7 @@ let user = () => {
   padding-left: 20px;
   transition: background 0.3s ease-in-out;
 }
+
 .el-submenu__title:hover {
   background-color: #f7eff0;
 }
@@ -315,7 +266,7 @@ let user = () => {
 
 
 .content-wrapper {
-  margin-top: 50px;
+  margin-top: 25px;
   margin-left: 230px;
   padding: 20px;
   transition: margin-left 0.3s ease;
@@ -323,11 +274,10 @@ let user = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   background-color: #f4f4f4;
 }
 
-.main-sidebar.collapsed + .content-wrapper {
+.main-sidebar.collapsed+.content-wrapper {
   margin-left: 60px;
 }
 
@@ -335,106 +285,55 @@ let user = () => {
 .container {
   display: flex;
   flex-direction: column;
-  width: 95%;
-  height: 95%;
+  width: 85%;
+  margin-top: 20px;
   min-width: 772px;
   min-height: 500px;
-  border: 1px solid #ccc;
+  border: none;
   padding: 20px;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
 .top_box {
   width: 100%;
   height: 50px;
-  font-size:25px;
+  font-size: 25px;
 
 }
 
-
-.boxes {
-  display: flex;
-  width: 100%;
-  padding-top: 25px;
-}
 .box {
-  flex: 1;
-  margin: 0 10px;
-}
-.field {
   display: flex;
-  align-items: center;
-  margin-bottom: 60px;
+  flex-direction: column;
+  /* 垂直排列子元素 */
+  gap: 20px;
 }
 
-#box1 {
-  margin-bottom: 30px;
-}
-.field label {
-  flex: 0 0 100px;
-  margin-right: 10px;
-  text-align: right;
-}
-
-.novel {
-  margin-bottom: 40px;
-  margin-left: 20px;
-}
-
-
-.field input[type="text"], .field input[type="file"] ,.field select,.field input[type="datetime-local"]
-,.field textarea{
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-/* ---- 🌟 按钮 ---- */
-.buttons {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-}
-
-.buttons .submit-btn, .buttons .cancel-btn {
-  padding: 12px 20px;
-  border-radius: 6px;
+.input {
+  width: 30%;
+  height: 37px;
   font-size: 14px;
-  font-weight: bold;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
-.submit-btn {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  border: none;
+.btn_start {
+  width: 38%;
+  height: 38px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: rgb(158, 177, 242);
 }
 
-.submit-btn:hover {
-  background: linear-gradient(135deg, #5a67d8, #6b46c1);
-  transform: scale(1.05);
-}
-
-.cancel-btn {
-  background: #e74c3c;
-  color: white;
-  border: none;
-}
-
-.cancel-btn:hover {
-  background: #c0392b;
-  transform: scale(1.05);
-}
-
-.submit-btn:active, .cancel-btn:active {
-  transform: scale(0.95);
+.btn_start:hover {
+  color: #ffffff;
+  background-color: #667eea;
 }
 
 /* ---- 🌟 响应式优化 ---- */
 @media (max-width: 767px) {
+
   .main-header,
   .content-wrapper {
     margin-left: 0;
@@ -456,5 +355,5 @@ let user = () => {
   .sidebar .el-submenu__title {
     font-size: 14px;
   }
-}
-</style>
+
+}</style>

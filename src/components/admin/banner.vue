@@ -31,7 +31,7 @@
                 <li class="el-menu-sub el-submenu">
                   <div class="el-submenu__title" @click="gomanage()" style="padding-left: 20px;">
                     <i class="fa fa-upload"></i>
-                    <span>上新小说</span>
+                    <span>管理书库</span>
                     <i class="el-submenu__icon-arrow"></i>
                   </div>
                 </li>
@@ -40,7 +40,7 @@
                 <li class="el-menu-sub el-submenu" @click="gochapter()">
                   <div class="el-submenu__title" style="padding-left: 20px;">
                     <i class="fa fa-download"></i>
-                    <span>章节发布</span>
+                    <span>上传新书</span>
                     <i class="el-submenu__icon-arrow"></i>
                   </div>
 

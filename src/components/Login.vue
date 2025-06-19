@@ -103,27 +103,27 @@ let login = () => {
             { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
         )
         .then((res) => {
-            if (res.data.code == 200) {
-                localStorage.setItem("token", res.data.data);
-                axios.post(
-                    "/user/token/getUser",
-                    {
-                        account: obj.user.account,
-                        password: obj.user.password,
-                    },
-                    { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
-                ).then(res => {
-                    if (res.data.code == 200) {
-                        sessionStorage.setItem("user", JSON.stringify(res.data.data));
-                        goBack();
-                    } {
-                    }
-                });
+            if (res.data.code === 200) {
+                const { token, user } = res.data.data;
+                
+                // 存储 token
+                localStorage.setItem("token", token);
+                
+                // 存储用户信息
+                sessionStorage.setItem("user", JSON.stringify(user));
+
+                // 返回上一页或跳转
+                goBack();
             } else {
                 ElMessage.error(res.data.msg);
             }
+        })
+        .catch((error) => {
+            console.error("登录失败:", error);
+            ElMessage.error("登录请求失败，请检查网络");
         });
-}
+};
+
 
 let lastRequestTime = 0;  // 上次请求的时间戳
 let verificationStartTime = 0;  // 验证码生成的时间戳

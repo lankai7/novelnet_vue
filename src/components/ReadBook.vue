@@ -45,6 +45,7 @@ import axios from "../hooks/request";
 import { onMounted, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { lineFeed } from "../hooks/cutString";
+import { ElMessage } from 'element-plus';
 
 let route = useRoute();
 let router = useRouter();
@@ -93,9 +94,9 @@ let getBookChapter = (num) => {
             obj.bookContentList = lineFeed(obj.bookChapter.content);
             obj.args.chapterNum = obj.bookChapter.chapterNum;
         } else if (res.data.code == 401) {
-            alert("已是第一章");
+            ElMessage.warning("已是第一章");
         } else if (res.data.code == 402) {
-            alert("已是最后一章");
+            ElMessage.warning("已是最后一章");
         }
     })
 };

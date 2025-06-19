@@ -31,7 +31,7 @@
                 <li class="el-menu-sub el-submenu" >
                   <div class="el-submenu__title" @click="gomanage()" style="padding-left: 20px;">
                     <i class="fa fa-upload"></i>
-                    <span>上新小说</span>
+                    <span>管理书库</span>
                     <i class="el-submenu__icon-arrow" ></i>
                   </div>
                 </li>
@@ -40,7 +40,7 @@
                 <li class="el-menu-sub el-submenu" @click="gochapter()" >
                   <div class="el-submenu__title"  style="padding-left: 20px;">
                     <i class="fa fa-download"></i>
-                    <span>章节发布</span>
+                    <span>上传新书</span>
                     <i class="el-submenu__icon-arrow" ></i>
                   </div>
 
@@ -282,7 +282,7 @@ let user = () => {
 }
 /* 内容区域样式 */
 .content-wrapper {
-  margin-top: 50px;
+  margin-top: 25px;
   margin-left: 230px;
   padding: 20px;
   transition: margin-left 0.3s ease;
@@ -290,7 +290,6 @@ let user = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   background-color: #f4f4f4;
 }
 
@@ -303,10 +302,10 @@ let user = () => {
   display: flex;
   flex-direction: column;
   width: 85%;
-  height: 85%;
+  margin-top: 20px;
   min-width: 772px;
   min-height: 500px;
-  border: 1px solid #ccc;
+  border: none;
   padding: 20px;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

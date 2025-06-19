@@ -5,10 +5,9 @@
             <img src="/image/icon/left.webp" class="scroll-btn left" @click="scrollLeft" alt="左滚动">
             <!-- 新闻资讯 -->
             <div class="news" ref="newsContainer">
-
                 <!-- 公告列表 -->
                 <div class="announcement-list">
-                    <div v-for="item in announcements" :key="item.id" class="announcement-item">
+                    <li v-for="item in announcements" :key="item.id" class="announcement-item">
                         <div class="announcement-header">
                             <span class="announcement-time">{{ item.createTime }}</span>
                         </div>
@@ -16,7 +15,9 @@
                         <p class="announcement-link">
                             <a :href="formatLink(item.link)" target="_blank">{{ item.link }}</a>
                         </p>
-                    </div>
+                        <div class="tooltip">{{ item.title }}</div>
+                    </li>
+
                 </div>
             </div>
             <!-- 右按钮 -->
@@ -25,18 +26,19 @@
         <!-- 好看的小说 -->
         <div class="good_novel">
             <div class="good_novel_title">
-                <span>推荐小说</span>
-                <button @click="showMove()">查看更多&gt;</button>
+                <span>推荐新书</span>
+                <button @click="showMove()">查看排行榜&gt;</button>
             </div>
             <div class="good_novel_list">
-                <div v-for="item, index in obj.books" :key="index" @click="goBookDetail(item.bid)">
+                <div v-for="item, index in obj.books" :key="index" class="good_novel_list_bak"
+                    @click="goBookDetail(item.bid)">
                     <img :src="`/image/bookImg/${item.imgPath}`">
                     <div class="good_novel_list_content">
                         <span class="good_novel_list_content_top">{{ item.name }}</span>
-                        <span class="good_novel_list_content_middle">{{ cutString(item.introduction, 30) }}</span>
+                        <span class="good_novel_list_content_middle">{{ cutString(item.introduction) }}</span>
                         <div class="good_novel_list_content_bottom">
-                            <span>{{ item.author }}</span>
-                            <span>{{ item.type }} | {{ item.state }}</span>
+                            <span class = "author"> {{ item.author }}</span>
+                            <span class = "type"> {{ item.type }} | {{ item.state }}</span>
                         </div>
                     </div>
                 </div>
@@ -68,7 +70,11 @@ let goBookDetail = (bid) => {
 
 let showMove = () => {
     router.push({
-        path: "/hello/bookList"
+        path: "/hello/bookList",
+        query: {
+            orderBy: "recommend_num",
+            title: "排行榜"
+        }
     });
 };
 //公告滚动按钮
@@ -86,11 +92,11 @@ const scrollRight = () => {
 
 //补齐域名
 const formatLink = (link) => {
-    if(link == null){
+    if (link == null) {
         return "";
     }
     else if (!link.startsWith("http://") && !link.startsWith("https://")) {
-      return "https://" + link; // 默认补充 https://
+        return "https://" + link; // 默认补充 https://
     }
     else {
         return link;
@@ -209,6 +215,7 @@ onMounted(() => {
 }
 
 .good_novel_title {
+    color:#8B0000;
     display: flex;
     justify-content: space-between;
     /* 在子元素之间和两端分配空间 */
@@ -244,11 +251,34 @@ onMounted(() => {
     grid-template-columns: repeat(3, 1fr);
     gap: 20px 35px;
     cursor: pointer;
+    flex-direction: column;
 }
 
-.good_novel_list>div {
+.good_novel_list_bak {
     display: flex;
     height: 150px;
+    flex: 1;
+    background: rgba(254, 254, 254, 0.1);
+    backdrop-filter: blur(10px);
+    /* 模糊滤镜，增强磨砂质感 */
+    -webkit-backdrop-filter: blur(10px);
+    /* 兼容 WebKit */
+    padding: 15px 15px 15px 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.good_novel_list_bak:hover {
+    background: linear-gradient(45deg,
+            rgba(207, 172, 244, 0.4) 0%,
+            /* 添加透明度：0.8 */
+            rgba(208, 189, 247, 0.4) 20%,
+            rgba(172, 218, 244, 0.4) 40%,
+            rgba(209, 201, 233, 0.4) 60%,
+            rgba(237, 172, 197, 0.4) 80%,
+            rgba(255, 153, 153, 0.4) 100%);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 .good_novel_list>div>img {
@@ -259,28 +289,41 @@ onMounted(() => {
     padding: 15px 10px;
     display: flex;
     justify-content: space-between;
-    flex-direction: column;
+
     flex-wrap: wrap;
 }
 
 .good_novel_list_content_top {
+    color: #5e3c99;
     font-size: 18px;
     font-weight: 600;
     line-height: 30px;
+    white-space: nowrap;
+    /* 禁止换行 */
+    overflow: hidden;
+    /* 超出部分隐藏 */
+    text-overflow: ellipsis;
+    /* 用省略号代替超出部分 */
 }
 
 .good_novel_list_content_middle {
+    color: #b76e79;
     font-size: 14px;
     text-indent: 20px;
     line-height: 25px;
+    max-width: 100%;
+    max-height: 60%;
+    overflow: hidden;
+    /* 超出部分隐藏 */
 }
 
 .good_novel_list_content_bottom {
-    color: #6f6f6f;
+    width: 100%;
+    color: #1c3d5a;
     font-size: 14px;
     line-height: 25px;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* 关键属性 */
 }
 
 /*公告*/
@@ -327,8 +370,47 @@ onMounted(() => {
     margin-right: 20px;
 }
 
+/*显示详细公告*/
+.announcement-item {
+    position: relative;
+}
+
+.tooltip {
+    display: none;
+    /* 隐藏时不显示 */
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    top: 10px;
+    /* 固定在屏幕上的某个位置 */
+    left: 50%;
+    transform: translateX(-50%);
+    /* 居中显示 */
+    width: 100%;
+    /* 设置宽度为父容器的 100% */
+    max-width: 300px;
+    /* 设置最大宽度限制 */
+    white-space: normal;
+    /* 允许自动换行 */
+    z-index: 1000;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    /* 固定定位在屏幕上 */
+    word-wrap: break-word;
+    /* 保证长单词换行 */
+    pointer-events: none;
+    /*不影响鼠标*/
+}
+
+.announcement-item:hover .tooltip {
+    display: block;
+}
+
+
 .announcement-item:hover {
     transform: translateY(-5px);
+    z-index: 1000;
 }
 
 .announcement-header {
@@ -362,13 +444,12 @@ onMounted(() => {
     /* 用省略号代替超出部分 */
     max-width: 180px;
     /* 限制最大宽度 */
-    color: #87d7ff;
     text-decoration: none;
     font-size: 14px;
 }
 
 .announcement-link a {
-    color: #87d7ff;
+    color: #1c3d5a;
     text-decoration: none;
     font-size: 14px;
 }
@@ -402,9 +483,10 @@ onMounted(() => {
     margin-left: 10px;
 }
 
-.news_show{
+.news_show {
     display: flex;
-  align-items: center; /* 垂直居中 */
-  gap: 10px; /* 按钮与 news 之间的间距 */
-}
-</style>
+    align-items: center;
+    /* 垂直居中 */
+    gap: 10px;
+    /* 按钮与 news 之间的间距 */
+}</style>

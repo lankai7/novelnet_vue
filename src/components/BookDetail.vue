@@ -122,6 +122,7 @@ import axios from '../hooks/request';
 import { onMounted, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ref } from 'vue';
+import { ElMessage } from 'element-plus';
 
 let route = useRoute();
 let router = useRouter();
@@ -138,6 +139,7 @@ let data = reactive({
     newComment: '',
     comments: {},
 })
+
 
 //翻页
 let PageCount = (totalChapters) => {
@@ -163,11 +165,12 @@ let collectBook = () => {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
         }).then(res => {
             if (res.data.code == 201) {
-                alert("收藏成功！")
+                ElMessage.success("收藏成功！")
+                getBook();
             } else if (res.data.code == 403) {
-                alert("重复收藏！")
+                ElMessage.warning("重复收藏！")
             } else {
-                alert("收藏失败！")
+                ElMessage.error("收藏失败！")
             }
         })
     } else {
@@ -185,10 +188,10 @@ let thumbsUp = () => {
         })
             .then(res => {
                 if (res.data.code == 200) {
-                    alert("点赞成功！")
+                    ElMessage.success("点赞成功！")
                     getBook();
                 } else {
-                    alert("点赞失败！")
+                    ElMessage.error("点赞失败！")
                 }
             })
     } else {
@@ -265,7 +268,7 @@ const fetchComments = async () => {
 // 提交评论
 const submitComment = async () => {
     if (!data.newComment.trim()) {
-        alert("评论内容不能为空！");
+        ElMessage.warning("评论内容不能为空！");
         return;
     }
     try {
@@ -279,7 +282,7 @@ const submitComment = async () => {
             commentText: data.newComment,
         });
 
-        if (response.data.code === 201) {
+        if (response.data.code === 200) {
             data.comments.push({
                 user_name: user.userName,
                 comment_text: data.newComment,
@@ -287,15 +290,16 @@ const submitComment = async () => {
             });
             data.commentCount++;
             data.newComment = "";
+            ElMessage.success(response.data.msg);
             getBook();
         } else {
-            alert("提交评论失败：" + response.data.msg);
+            ElMessage.warning("提交评论失败：" + response.data.msg);
         }
     } catch (error) {
         if (confirm("此操作需要登录，是否登录？")) {
             router.push({ path: '/login' });
         } else {
-            alert("提交评论失败：未登录或网络错误！");
+            ElMessage.error("提交评论失败：未登录或网络错误！");
         }
     }
 };
@@ -809,4 +813,8 @@ onMounted(() => {
 
 .to_top:hover {
     color: #e32967;
-}</style>
+}
+</style>
+
+
+
